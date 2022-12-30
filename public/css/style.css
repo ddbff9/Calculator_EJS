@@ -1,0 +1,79 @@
+*, *::before, *::after{
+  box-sizing: border-box;
+  font-family: 'Varela Round',Arial, Helvetica, sans-serif;
+  font-weight: normal;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  background-image: url('https://images.unsplash.com/32/Mc8kW4x9Q3aRR3RkP5Im_IMG_4417.jpg?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80');
+}
+
+.calculator-grid{
+  display:grid;
+  justify-content: center;
+  align-content: center;
+  min-height: 100vh;
+  grid-template-columns: repeat(4,100px);
+  grid-template-rows: minmax(120px, auto) repeat(5,100px);
+}
+
+
+.calculator-grid > button {
+  cursor: pointer;
+  font-size: 2rem;
+  border: 1px solid white;
+  outline: none;
+  background-color: rgba(205, 214, 208, .75);
+}
+
+.calculator-grid .function{
+  background-color: rgba(61, 60, 60, 0.75);
+  color: lightgray;
+}
+
+.calculator-grid .function:hover{
+  background-color: rgba(61, 60, 60, 0.9);
+  color: lightgray;
+}
+
+.calculator-grid .operation{
+  background-color: rgba(255, 165, 0, .75);
+}
+
+.calculator-grid .operation:hover{
+  background-color: rgba(255, 165, 0, .90);
+}
+
+
+.calculator-grid > button:hover {
+  background-color: rgba(205, 214, 208, .90);
+}
+
+.span-two {
+  grid-column: span 2;
+}
+
+.output {
+  grid-column: 1/-1;
+  background-color: rgba(0,0,0,.75);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  flex-direction: column;
+  padding: 10px;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.output .previous-operand {
+  color: rgba(255,255,255,0.75);
+  font-size: 1.5rem;
+}
+
+.output .current-operand {
+  color: rgba(255,255,255,1);
+  font-size: 2.5rem;
+}
+
