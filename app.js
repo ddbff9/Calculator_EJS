@@ -1,4 +1,5 @@
 const express = require('express');
+const { appendFile } = require('fs');
 const app = express();
 const path = require('path');
 
@@ -14,4 +15,3 @@ app.get('/', (req, res) => {
 app.listen(3000,() =>{
   console.log('APP IS LISTENING ON PORT 3000!')
 })
-
