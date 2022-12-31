@@ -25,6 +25,9 @@ class Calculator {
 
   delete() {
     this.currentOperand = parseFloat(this.currentOperand.toString().slice(0, -1));
+    if(isNaN(this.currentOperand)){
+      this.currentOperand = '';
+    }
   }
 
   chooseOperation(operation){
