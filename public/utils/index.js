@@ -3,70 +3,79 @@ class Calculator {
     this.previousOperandTextElement = previousOperandTextElement;
     this.currentOperandTextElement = currentOperandTextElement
     this.clear();
-  }
+   }
 
   clear() {
-    this.previousOperandTextElement.textContent = '';
-    this.currentOperandTextElement.textContent = '';
-  }
-
-  delete() {
-    this.currentOperandTextElement.textContent = this.currentOperandTextElement.textContent.toString().slice(0, -1);
+    this.currentOperand = '';
+    this.previousOperand = '';
+    this.operation = undefined;
+    this.updateDisplay();
   }
 
   appendNumber(number){
-    if(this.currentOperandTextElement === ''){
-      this.currentOperandTextElement.textContent = number.toString();
-    } else {
-      this.currentOperandTextElement.textContent = this.currentOperandTextElement.textContent.toString() + number.toString();
+    if(number === '.' && this.currentOperand.includes('.'))return
+    this.currentOperand = this.currentOperand.toString() + number.toString();
+  }
+
+  negation(){
+    if(this.currentOperand !== 0){
+      this.currentOperand = this.currentOperand * (-1);
     }
   }
 
-  chooseOperation(operator){
-    switch(operator){
+  delete() {
+    this.currentOperand = parseFloat(this.currentOperand.toString().slice(0, -1));
+  }
+
+  chooseOperation(operation){
+    if(this.currentOperand === '') return;
+    if(this.previousOperand !== ''){
+      this.compute();
+    }
+    this.operation = operation;
+    this.previousOperand = this.currentOperand;
+    this.currentOperand = '';
+  }
+
+  compute() {
+    switch(this.operation){
       case '+':
-        this.previousOperandTextElement.textContent = `${this.currentOperandTextElement.textContent.toString()} +`;
-        operand = '+';
+        this.currentOperand = parseFloat(this.previousOperand) + parseFloat(this.currentOperand);
+        this.previousOperand = '';
+        this.operation ='';
         break;
 
       case '-':
-        this.previousOperandTextElement.textContent = `${this.currentOperandTextElement.textContent.toString()} -`;
-        operand = '-';
-        break;
+
+      this.currentOperand = parseFloat(this.previousOperand) - parseFloat(this.currentOperand);
+      this.previousOperand = '';
+      this.operation ='';
+      break;
 
       case 'x':
-        this.previousOperandTextElement.textContent = `${this.currentOperandTextElement.textContent.toString()} x`;
-        operand = 'x';
+        this.currentOperand = parseFloat(this.previousOperand) * parseFloat(this.currentOperand);
+        this.previousOperand = '';
+        this.operation ='';
         break;
 
       case '÷':
-        this.previousOperandTextElement.textContent = `${this.currentOperandTextElement.textContent.toString()} ÷`;
-        operand = '÷';
+        this.currentOperand = parseFloat(this.previousOperand) / parseFloat(this.currentOperand);
+        this.previousOperand = '';
+        this.operation ='';
         break;
+
       default:
         return;
     }
-    this.currentOperandTextElement.textContent = '';
   }
 
-  compute(operator){
-    switch(operator){
-      case '+':
-        this.currentOperandTextElement.textContent = parseFloat(this.currentOperandTextElement.textContent) + parseFloat(this.previousOperandTextElement.textContent);
-        this.previousOperandTextElement.textContent = '';
-
-      case '-':
-
-        this.currentOperandTextElement.textContent = parseFloat(this.currentOperandTextElement.textContent) - parseFloat(this.previousOperandTextElement.textContent);
-        this.previousOperandTextElement.textContent = '';
-
-      case 'x':
-        this.currentOperandTextElement.textContent = parseFloat(this.currentOperandTextElement.textContent) * parseFloat(this.previousOperandTextElement.textContent);
-        this.previousOperandTextElement.textContent = '';
-        
-      case '÷':
-        this.currentOperandTextElement.textContent = parseFloat(this.currentOperandTextElement.textContent) / parseFloat(this.previousOperandTextElement.textContent);
-        this.previousOperandTextElement.textContent = '';
+  updateDisplay(){
+    if(this.operation === undefined){
+      this.previousOperandTextElement.innerText = this.previousOperand.toString();
+      this.currentOperandTextElement.innerText = this.currentOperand.toString();
+    } else {
+      this.previousOperandTextElement.innerText = `${this.previousOperand.toString()} ${this.operation}`;
+      this.currentOperandTextElement.innerText = `${this.currentOperand.toString()}`;
     }
   }
 }
@@ -82,28 +91,36 @@ const equalsButton = document.querySelector('[data-equals]');
 
 const calculator = new Calculator(previousOperandTextElement, currentOperandTextElement);
 
-let operand;
-
 numberButtons.forEach(button =>{
   button.addEventListener('click',()=>{
     calculator.appendNumber(button.textContent);
+    calculator.updateDisplay();
   })
 });
 
 allClearButton.addEventListener('click',()=>{
   calculator.clear();
+  calculator.updateDisplay();
+});
+
+negationButton.addEventListener('click',()=>{
+  calculator.negation();
+  calculator.updateDisplay();
 });
 
 deleteButton.addEventListener('click',()=>{
   calculator.delete();
+  calculator.updateDisplay();
 });
 
 operationButtons.forEach(button =>{
   button.addEventListener('click',()=>{
     calculator.chooseOperation(button.textContent.toString());
+    calculator.updateDisplay();
   })
 })
 
 equalsButton.addEventListener('click',()=>{
-  calculator.compute(operand);
+  calculator.compute();
+  calculator.updateDisplay();
 })
